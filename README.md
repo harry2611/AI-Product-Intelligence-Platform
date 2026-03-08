@@ -115,6 +115,38 @@ Services:
    - `Summarize negative feedback about payments.`
 5. Generate weekly report from dashboard or API.
 
+## Screenshots
+
+### 1) Main Dashboard: Ingestion + AI Assistant
+
+![Main Dashboard: Ingestion and AI Assistant](docs/screenshots/01-main-dashboard-ingestion-assistant.png)
+
+**What it shows:**  
+The top section of the platform with KPI cards, feedback ingestion form, and the AI Product Manager Assistant response panel with evidence citations.
+
+**Use:**  
+This is the primary operational view for PMs to submit feedback, trigger AI analysis, and ask RAG-powered product questions backed by semantic matches.
+
+### 2) Analytics + Live Processing Stream
+
+![Analytics and Live Processing Stream](docs/screenshots/02-analytics-live-stream.png)
+
+**What it shows:**  
+Sentiment distribution chart, issue trend chart, live websocket event stream, and ranked lists for top topics, feature requests, and complaints.
+
+**Use:**  
+Helps teams monitor real-time pipeline activity and quickly identify which product areas are trending negatively or driving the most feature demand.
+
+### 3) Weekly AI Product Insight Report
+
+![Weekly AI Product Insight Report](docs/screenshots/03-weekly-report.png)
+
+**What it shows:**  
+Auto-generated weekly summary including top issues, top feature requests, and concrete recommendations.
+
+**Use:**  
+Provides a decision-ready weekly snapshot for roadmap planning, prioritization reviews, and stakeholder updates.
+
 ## API Overview
 
 See [docs/API.md](docs/API.md) for complete endpoint details.
