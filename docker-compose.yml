@@ -1,55 +1,123 @@
 services:
-  backend:
-    build: ./backend
-    ports:
-      - "8000:8000"
+  postgres:
+    image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=feedback_analyzer
-      - POSTGRES_HOST=db
-    networks:
-      - app-network
-    depends_on:
-      db:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "80:80"
-    networks:
-      - app-network
-    depends_on:
-      backend:
-        condition: service_healthy
-
-  db:
-    image: postgres:13
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: product_intelligence
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=feedback_analyzer
-    networks:
-      - app-network
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  chroma:
+    image: chromadb/chroma:0.5.23
+    environment:
+      IS_PERSISTENT: "TRUE"
+      PERSIST_DIRECTORY: /chroma/chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/product_intelligence
+      REDIS_URL: redis://redis:6379/0
+      CHROMA_HOST: chroma
+      CHROMA_PORT: 8000
+      CHROMA_COLLECTION_NAME: feedback_embeddings
+      EMBEDDING_MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      CORS_ORIGINS: http://localhost:5173,http://localhost:80,http://localhost
+      RATE_LIMIT_PER_MINUTE: 120/minute
+      WORKER_QUEUE: feedback-jobs
+      FEEDBACK_EVENT_CHANNEL: feedback_events
+      WEEKLY_REPORT_DAY: mon
+      WEEKLY_REPORT_HOUR: 8
+      WEEKLY_REPORT_MINUTE: 0
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
       retries: 5
 
-networks:
-  app-network:
-    driver: bridge
+  worker:
+    build:
+      context: ./backend
+    command: ["python", "-m", "app.workers.worker"]
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/product_intelligence
+      REDIS_URL: redis://redis:6379/0
+      CHROMA_HOST: chroma
+      CHROMA_PORT: 8000
+      CHROMA_COLLECTION_NAME: feedback_embeddings
+      EMBEDDING_MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      WORKER_QUEUE: feedback-jobs
+      FEEDBACK_EVENT_CHANNEL: feedback_events
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+
+  scheduler:
+    build:
+      context: ./backend
+    command: ["python", "-m", "app.workers.scheduler"]
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/product_intelligence
+      REDIS_URL: redis://redis:6379/0
+      WORKER_QUEUE: feedback-jobs
+      WEEKLY_REPORT_DAY: mon
+      WEEKLY_REPORT_HOUR: 8
+      WEEKLY_REPORT_MINUTE: 0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   postgres_data:
+  chroma_data:

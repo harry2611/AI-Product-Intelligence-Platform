@@ -1,0 +1,49 @@
+message,timestamp,source,user_id
+"Checkout takes more than 12 seconds on mobile and sometimes times out.",2026-02-20T09:10:00Z,mobile_app,qa_u1001
+"Please add dark mode for late-night usage.",2026-02-20T09:22:00Z,in_app,qa_u1002
+"Payment failed with card verification error, had to retry three times.",2026-02-20T10:05:00Z,web,qa_u1003
+"The new dashboard UI looks clean and much faster than before.",2026-02-20T10:44:00Z,web,qa_u1004
+"Login OTP is delayed by 2-3 minutes, this is blocking access.",2026-02-20T11:15:00Z,mobile_app,qa_u1005
+"Feature request: Apple Pay integration would reduce checkout friction.",2026-02-20T11:35:00Z,support_ticket,qa_u1006
+"Search results are relevant but filters reset unexpectedly.",2026-02-21T08:12:00Z,web,qa_u1007
+"App crashes when opening billing history after update.",2026-02-21T08:40:00Z,mobile_app,qa_u1008
+"Could you add export to CSV and scheduled weekly reports?",2026-02-21T09:07:00Z,slack,qa_u1009
+"Checkout latency improved this week, good job team.",2026-02-21T10:18:00Z,web,qa_u1010
+"Password reset email arrives late; users think it failed.",2026-02-21T11:02:00Z,support_ticket,qa_u1011
+"Please add Google Pay along with Apple Pay.",2026-02-21T11:28:00Z,in_app,qa_u1012
+"The onboarding tooltip covers the submit button on small screens.",2026-02-22T07:55:00Z,mobile_app,qa_u1013
+"Navigation between projects is confusing and not intuitive.",2026-02-22T08:19:00Z,web,qa_u1014
+"We need role-based dashboards for product, support, and leadership.",2026-02-22T08:43:00Z,api,qa_u1015
+"Checkout page failed twice today, error shown was generic.",2026-02-22T09:20:00Z,web,qa_u1016
+"Love the new performance chart; page load is noticeably better.",2026-02-22T09:46:00Z,web,qa_u1017
+"Feature request: custom alert thresholds for negative sentiment.",2026-02-22T10:30:00Z,in_app,qa_u1018
+"OTP verification fails on poor networks; please add retry without full restart.",2026-02-23T07:58:00Z,mobile_app,qa_u1019
+"Payment screen is too crowded; simplify labels and spacing.",2026-02-23T08:41:00Z,web,qa_u1020
+"Please support multilingual feedback analysis, starting with Spanish.",2026-02-23T09:12:00Z,support_ticket,qa_u1021
+"Minor issue: chart legends overlap at 125% browser zoom.",2026-02-23T10:03:00Z,web,qa_u1022
+"Search is fast now, but relevance for product tags could improve.",2026-02-23T10:44:00Z,api,qa_u1023
+"Dark mode and compact table view would help power users.",2026-02-23T11:26:00Z,in_app,qa_u1024
+"Checkout spinner never stops after coupon apply.",2026-02-24T07:49:00Z,web,qa_u1025
+"Bug: team invite link opens blank page on Safari.",2026-02-24T08:15:00Z,web,qa_u1026
+"Could you add SSO with Google Workspace and Okta?",2026-02-24T08:52:00Z,sales_call,qa_u1027
+"Great support response time this week, very impressed.",2026-02-24T09:33:00Z,support_ticket,qa_u1028
+"Payment success rate dropped after 9 PM UTC.",2026-02-24T10:07:00Z,api,qa_u1029
+"Need a way to bulk-tag feedback entries by theme.",2026-02-24T10:55:00Z,slack,qa_u1030
+"Login works, but session expires too quickly during meetings.",2026-02-25T08:01:00Z,web,qa_u1031
+"Please add in-app changelog and release notes panel.",2026-02-25T08:39:00Z,in_app,qa_u1032
+"Dashboard load is smooth now; huge improvement versus last month.",2026-02-25T09:10:00Z,web,qa_u1033
+"OTP SMS not received for some Indian phone numbers.",2026-02-25T09:42:00Z,support_ticket,qa_u1034
+"Feature request: allow saving assistant answers to report drafts.",2026-02-25T10:24:00Z,in_app,qa_u1035
+"Checkout error message should show actionable next steps.",2026-02-25T11:05:00Z,web,qa_u1036
+"Please support webhook integration for feedback events.",2026-02-26T07:54:00Z,api,qa_u1037
+"Bug in reports: date filter resets when switching tabs.",2026-02-26T08:33:00Z,web,qa_u1038
+"Performance is solid today, no lag while browsing analytics.",2026-02-26T09:18:00Z,web,qa_u1039
+"Need custom segmentation by plan type and region.",2026-02-26T09:57:00Z,sales_call,qa_u1040
+"Payment refunds are hard to locate in billing history.",2026-02-26T10:36:00Z,web,qa_u1041
+"Please add keyboard shortcuts for faster triage.",2026-02-26T11:11:00Z,in_app,qa_u1042
+"Login screen should support passkeys.",2026-02-27T08:08:00Z,mobile_app,qa_u1043
+"I appreciate the new trend chart; it's easier to read.",2026-02-27T08:47:00Z,web,qa_u1044
+"Checkout remains slow during peak traffic windows.",2026-02-27T09:23:00Z,api,qa_u1045
+"Dark mode request again from enterprise users.",2026-02-27T10:12:00Z,sales_call,qa_u1046
+"Bug: CSV upload fails when feedback contains emojis.",2026-02-27T10:58:00Z,web,qa_u1047
+"Please add Jira sync for automatically creating bug tickets.",2026-02-27T11:31:00Z,slack,qa_u1048

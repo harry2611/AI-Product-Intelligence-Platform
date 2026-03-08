@@ -1,0 +1,9 @@
+message,timestamp,source,user_id
+"Checkout page is very slow and sometimes fails payment",2026-03-01T10:12:00Z,web,usr_1001
+"Please add dark mode support for dashboard",2026-03-01T11:20:00Z,in_app,usr_1002
+"Login OTP keeps timing out on iOS app",2026-03-02T08:33:00Z,mobile,usr_1003
+"Great experience overall, UI feels much better",2026-03-02T15:12:00Z,web,usr_1004
+"Would like Apple Pay option in checkout",2026-03-03T07:55:00Z,support_ticket,usr_1005
+"Reports export should support CSV and scheduled email",2026-03-03T13:42:00Z,slack,usr_1006
+"Billing history screen crashes after latest release",2026-03-04T09:27:00Z,mobile,usr_1007
+"Navigation is confusing when switching projects",2026-03-04T16:03:00Z,web,usr_1008

@@ -1,24 +1,10 @@
-import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
-import FeedbackForm from './components/FeedbackForm';
-import Dashboard from './components/Dashboard';
+import { Dashboard } from './pages/Dashboard';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Smart Feedback Analyzer
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Welcome to the Smart Feedback Analyzer platform.
-        </Typography>
-        <Box sx={{ mt: 4 }}>
-          <FeedbackForm />
-          <Dashboard />
-        </Box>
-      </Box>
-    </Container>
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      <Dashboard />
+    </main>
   );
 }
 

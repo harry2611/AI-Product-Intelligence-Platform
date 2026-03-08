@@ -1,109 +1,174 @@
-# Smart Feedback Analyzer
+# AI Product Intelligence Platform
 
-A full-stack application that uses Machine Learning to analyze customer feedback in real-time, providing sentiment analysis and topic extraction.
+A production-style full-stack system for collecting product feedback, processing it with AI agents, indexing it in a vector database, and generating actionable product intelligence.
 
-## Features
+## What This Project Demonstrates
 
-- Real-time feedback analysis using ML models
-- Sentiment Analysis using HuggingFace Transformers
-- Topic Extraction using spaCy
-- Interactive visualization of analytics
-- Docker containerization for easy deployment
-- Real-time analytics dashboard with charts and word clouds
-- PostgreSQL database for persistent storage
-- Containerized deployment with Docker
+- Real-time feedback ingestion (`manual`, `CSV`, `JSON`, API)
+- Asynchronous AI processing with Redis Queue workers
+- Multi-agent analysis pipeline:
+  - Sentiment Agent
+  - Topic Extraction Agent
+  - Feature Request Agent
+  - Insight Agent
+- Embedding pipeline using `SentenceTransformers`
+- Vector search using `ChromaDB`
+- RAG assistant for product-manager queries
+- Live dashboard updates via WebSockets
+- Weekly AI report generation via scheduler
+- FastAPI + PostgreSQL + SQLAlchemy backend
+- React + Tailwind + Recharts frontend
+- Dockerized deployment for local run
 
-## Tech Stack
+## Repository Structure
 
-- Backend: FastAPI (Python)
-- Frontend: React with TypeScript
-- Database: PostgreSQL
-- ML/NLP: spaCy, HuggingFace Transformers
-- Containerization: Docker
-- Deployment: AWS (ready)
+```text
+.
+├── backend/
+│   ├── app/
+│   │   ├── ai_agents/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── db/
+│   │   ├── models/
+│   │   ├── rag/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── vector_db/
+│   │   └── workers/
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   └── types/
+│   ├── Dockerfile
+│   └── nginx.conf
+├── data/
+│   ├── sample_feedback.csv
+│   └── sample_feedback.json
+├── docs/
+│   ├── API.md
+│   └── ARCHITECTURE.md
+├── docker-compose.yml
+└── .env.example
+```
 
-## Getting Started
+## Architecture Flow
 
-### Prerequisites
+1. Feedback hits ingestion API (`/api/v1/feedback/...`).
+2. Feedback is persisted in PostgreSQL with status `pending`.
+3. Job is pushed to Redis queue.
+4. Worker consumes job and executes AI pipeline:
+   - sentiment classification
+   - topic extraction
+   - feature request detection
+   - single-feedback insight generation
+5. Worker generates embedding and stores vectors in ChromaDB.
+6. Worker writes analysis results to PostgreSQL and publishes real-time event to Redis Pub/Sub.
+7. API service listens to events and broadcasts to connected dashboard clients via WebSocket.
+8. Dashboard refreshes analytics and stream updates live.
+9. Weekly scheduler queues weekly insight report generation.
 
-- Docker and Docker Compose
-- Node.js (for local frontend development)
-- Python 3.9+ (for local backend development)
+## Environment Setup
 
-### Installation
+Copy env file:
 
-1. Clone the repository:
-\`\`\`bash
-git clone <repository-url>
-cd smart-feedback-analyzer
-\`\`\`
+```bash
+cp .env.example .env
+```
 
-2. Start the application using Docker Compose:
-\`\`\`bash
-docker-compose up --build
-\`\`\`
+Set your OpenAI key if you want LLM-backed analysis/RAG generation:
 
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
+```bash
+OPENAI_API_KEY=<your-key>
+```
 
-### Local Development
+If `OPENAI_API_KEY` is not set, the platform still works using deterministic fallback logic.
 
-#### Backend
+## Run with Docker
 
-1. Create a Python virtual environment:
-\`\`\`bash
+```bash
+docker compose up --build
+```
+
+Services:
+
+- Frontend: `http://localhost`
+- Backend API: `http://localhost:8000`
+- Swagger Docs: `http://localhost:8000/docs`
+- Chroma service: `http://localhost:8001`
+
+## Quick Demo
+
+1. Open dashboard at `http://localhost`.
+2. Submit manual feedback or upload:
+   - `data/sample_feedback.csv`
+   - `data/sample_feedback.json`
+3. Watch live processing events in the stream panel.
+4. Ask assistant questions:
+   - `What are the most common complaints?`
+   - `What features are users requesting?`
+   - `Summarize negative feedback about payments.`
+5. Generate weekly report from dashboard or API.
+
+## API Overview
+
+See [docs/API.md](docs/API.md) for complete endpoint details.
+
+Key endpoints:
+
+- `POST /api/v1/feedback/manual`
+- `POST /api/v1/feedback/upload/csv`
+- `POST /api/v1/feedback/upload/json`
+- `GET /api/v1/analytics/summary`
+- `POST /api/v1/assistant/query`
+- `GET /api/v1/reports/weekly/latest`
+- `POST /api/v1/reports/weekly/generate`
+- `WS /ws/updates`
+
+## Local (Non-Docker) Run
+
+### Backend
+
+```bash
 cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-\`\`\`
-
-2. Install dependencies:
-\`\`\`bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-\`\`\`
+uvicorn app.main:app --reload
+```
 
-3. Run the FastAPI server:
-\`\`\`bash
-uvicorn main:app --reload
-\`\`\`
+### Worker
 
-#### Frontend
+```bash
+cd backend
+python -m app.workers.worker
+```
 
-1. Install dependencies:
-\`\`\`bash
+### Scheduler
+
+```bash
+cd backend
+python -m app.workers.scheduler
+```
+
+### Frontend
+
+```bash
 cd frontend
 npm install
-\`\`\`
+npm run dev
+```
 
-2. Start the development server:
-\`\`\`bash
-npm start
-\`\`\`
+## Production Considerations
 
-## API Endpoints
-
-- POST /feedback/ - Submit new feedback
-- GET /feedback/ - Retrieve all feedback entries
-- GET /analytics/sentiment - Get sentiment distribution
-- GET /analytics/topics - Get topic distribution
-
-## Deployment
-
-The application is containerized and can be deployed to AWS ECS or Kubernetes. Configuration files for AWS deployment are included in the repository.
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-=======
->>>>>>> 9abb7fa3d467972793302b9749ad0f18a5297623
+- Replace default `SECRET_KEY`.
+- Use managed Postgres/Redis/Chroma.
+- Add Alembic migrations before production rollout.
+- Add centralized logging and metrics (Prometheus/Grafana).
+- Restrict CORS and enforce authentication on protected routes.
+- Configure autoscaling for API and worker services.

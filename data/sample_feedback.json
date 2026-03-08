@@ -1,0 +1,32 @@
+[
+  {
+    "message": "Checkout API latency is high in evening traffic windows.",
+    "timestamp": "2026-03-05T10:30:00Z",
+    "source": "api",
+    "user_id": "usr_1101"
+  },
+  {
+    "message": "Feature request: add dark mode and customizable widgets.",
+    "timestamp": "2026-03-05T11:10:00Z",
+    "source": "api",
+    "user_id": "usr_1102"
+  },
+  {
+    "message": "Payments fail intermittently with card verification errors.",
+    "timestamp": "2026-03-05T12:50:00Z",
+    "source": "api",
+    "user_id": "usr_1103"
+  },
+  {
+    "message": "Please add Apple Pay and Google Pay integration.",
+    "timestamp": "2026-03-05T13:25:00Z",
+    "source": "api",
+    "user_id": "usr_1104"
+  },
+  {
+    "message": "Love the new analytics page, much cleaner and faster.",
+    "timestamp": "2026-03-05T14:10:00Z",
+    "source": "api",
+    "user_id": "usr_1105"
+  }
+]
